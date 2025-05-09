@@ -1,0 +1,10 @@
+.env
+/node_modules
+/dist
+/build
+
+# Docker files
+Dockerfile*
+docker-compose*
+**/*docker-compose*
+**/*Dockerfile*
