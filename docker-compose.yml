@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:15
+    container_name: nextcloud-db
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=utpprueba
+
+  app:
+    image: nextcloud:latest
+    container_name: nextcloud-app
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    volumes:
+      - nextcloud_data:/var/www/html
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+      - POSTGRES_PASSWORD=utpprueba
+      - NEXTCLOUD_ADMIN_USER=sebas
+      - NEXTCLOUD_ADMIN_PASSWORD=utpprueba
+      - NEXTCLOUD_TRUSTED_DOMAINS=localhost app
+      
+  onlyoffice:
+    image: onlyoffice/documentserver:latest
+    container_name: onlyoffice-server
+    restart: always
+    ports:
+      - "9090:80"
+    environment:
+      - JWT_ENABLED=true
+      - JWT_SECRET=utpprueba
+
+volumes:
+  db_data:
+  nextcloud_data:
